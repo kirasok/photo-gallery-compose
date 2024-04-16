@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+import java.util.Base64
+
 plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -11,8 +14,8 @@ android {
     applicationId = "io.github.kirasok.photogallerycompose"
     minSdk = 24
     targetSdk = 34
-    versionCode = 1
-    versionName = "1.0"
+    versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
+    versionName = System.getenv("VERSION") ?: "0.0.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     vectorDrawables {
@@ -20,18 +23,35 @@ android {
     }
   }
 
+  signingConfigs {
+    create("release") {
+      val keystore = File(projectDir, System.getenv("KEYSTORE_PATH") ?: "keystore.keystore").apply {
+        ensureParentDirsCreated()
+        createNewFile()
+        val base64: String = System.getenv("KEYSTORE")?.replace("\n", "")
+          ?: "" // Base64 doesn't consider string valid if it has \n character
+        writeBytes(Base64.getDecoder().decode(base64))
+      }
+      storeFile = keystore
+      storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+      keyAlias = System.getenv("KEYSTORE_ALIAS") ?: ""
+      keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: ""
+    }
+  }
+
   buildTypes {
     release {
-      isMinifyEnabled = false
+      isMinifyEnabled = true
+      signingConfig = signingConfigs.getByName("release")
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   kotlinOptions {
-    jvmTarget = "1.8"
+    jvmTarget = JavaVersion.VERSION_17.toString()
   }
   buildFeatures {
     compose = true
