@@ -4,6 +4,8 @@ import java.util.Base64
 plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.jetbrainsKotlinAndroid)
+  alias(libs.plugins.ksp)
+  alias(libs.plugins.hilt)
 }
 
 android {
