@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
+import java.io.FileInputStream
 import java.util.Base64
+import java.util.Properties
 
 plugins {
   alias(libs.plugins.androidApplication)
@@ -7,6 +9,10 @@ plugins {
   alias(libs.plugins.ksp)
   alias(libs.plugins.hilt)
 }
+
+// TODO: remove when getting api key via shared preferences
+val localProperties = Properties()
+localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
   namespace = "io.github.kirasok.photogallerycompose"
@@ -57,6 +63,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
   composeOptions {
     kotlinCompilerExtensionVersion = "1.5.11"
@@ -65,6 +72,10 @@ android {
     resources {
       excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+  }
+
+  buildTypes.forEach {
+    it.buildConfigField("String", "API_KEY", localProperties["API_KEY"].toString())
   }
 }
 
@@ -79,6 +90,9 @@ dependencies {
   implementation(libs.androidx.ui.tooling.preview)
   implementation(libs.androidx.material3)
   implementation(libs.hilt.android)
+  implementation(libs.converter.gson)
+  implementation(libs.androidx.paging.runtime)
+  implementation(libs.androidx.paging.compose)
   ksp(libs.hilt.compiler)
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.navigation.compose)
