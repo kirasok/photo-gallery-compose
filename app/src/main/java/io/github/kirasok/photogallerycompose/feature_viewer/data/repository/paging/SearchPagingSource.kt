@@ -18,9 +18,9 @@ class SearchPagingSource(
     val currentPage = params.key ?: 1
     val photos = remoteDataSource.searchPhotos(query, currentPage, params.loadSize)
     LoadResult.Page(
-      data = photos.photos,
+      data = photos.photosResponse.photos,
       prevKey = if (currentPage == 1) null else currentPage - 1,
-      nextKey = if (currentPage != photos.pages) currentPage + 1 else null
+      nextKey = if (currentPage != photos.photosResponse.pages) currentPage + 1 else null
     )
   } catch (exception: IOException) {
     LoadResult.Error(exception)
