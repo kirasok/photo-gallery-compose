@@ -86,6 +86,7 @@ jobs:
           KEYSTORE_ALIAS_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
           VERSION_CODE: ${{ needs.version.outputs.version-code }}
           VERSION: ${{ needs.version.outputs.version }}
+          PHOTO_API_KEY: "${{ secrets.PHOTO_API_KEY }}"
         run: |
           ./gradlew assembleRelease
       - name: Archive Build # upload apk to be used in deploy job

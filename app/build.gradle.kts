@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
-import java.io.FileInputStream
 import java.util.Base64
-import java.util.Properties
 
 plugins {
   alias(libs.plugins.androidApplication)
@@ -9,10 +7,6 @@ plugins {
   alias(libs.plugins.ksp)
   alias(libs.plugins.hilt)
 }
-
-// TODO: remove when getting api key via shared preferences
-val localProperties = Properties()
-localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
 android {
   namespace = "io.github.kirasok.photogallerycompose"
@@ -75,7 +69,7 @@ android {
   }
 
   buildTypes.forEach {
-    it.buildConfigField("String", "API_KEY", localProperties["API_KEY"].toString())
+    it.buildConfigField("String", "API_KEY", System.getenv("PHOTO_API_KEY").toString())
   }
 }
 
