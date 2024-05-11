@@ -2,7 +2,6 @@ package io.github.kirasok.photogallerycompose.feature_viewer.presentation.compon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,7 @@ fun PhotoSearchBar(
   modifier: Modifier = Modifier,
   query: String,
   onQueryChange: (String) -> Unit,
-  onSearch: KeyboardActionScope.() -> Unit,
+  onSearch: () -> Unit,
   active: Boolean,
   onActiveChange: (Boolean) -> Unit,
 ) {
@@ -43,7 +42,10 @@ fun PhotoSearchBar(
     value = query,
     onValueChange = onQueryChange,
     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-    keyboardActions = KeyboardActions(onSearch = onSearch),
+    keyboardActions = KeyboardActions(onSearch = {
+      focusManager.clearFocus()
+      onSearch()
+    }),
     singleLine = true,
     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
     trailingIcon = {
