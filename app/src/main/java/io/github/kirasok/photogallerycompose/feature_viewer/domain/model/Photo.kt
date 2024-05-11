@@ -11,6 +11,6 @@ data class Photo(
   val secret: String,
   val server: String,
   val title: String,
-  @SerializedName("url_s") val url: String,
+  @SerializedName("url_s") val thumbnail: String,
 ) {
 }
