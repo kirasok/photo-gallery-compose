@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.kirasok.photogallerycompose.feature_viewer.presentation.popular.PopularScreen
+import io.github.kirasok.photogallerycompose.feature_viewer.presentation.catalogue.CatalogueScreen
 import io.github.kirasok.photogallerycompose.ui.theme.PhotoGalleryComposeTheme
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
       PhotoGalleryComposeTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-          PopularScreen()
+          CatalogueScreen()
         }
       }
     }
